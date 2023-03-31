@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AQI CALCULATOR</title>
+</head>
+<body>
+  <!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>AQI Calculator</title>
+  <link rel="stylesheet" type="text/css" href="/aqi.css">
+  <script>
+    function calculateAQI() {
+  // Get PM2.5 and PM10 values from input fields
+  var pm25 = document.getElementById("pm25").value;
+  var pm10 = document.getElementById("pm10").value;
+  
+  // Calculate AQI for PM2.5 and PM10
+  var aqiPM25 = calculateAQIPM25(pm25);
+  var aqiPM10 = calculateAQIPM10(pm10);
+  
+  // Display higher AQI value
+  var aqi = Math.max(aqiPM25, aqiPM10);
+  
+  // Display AQI value in input field
+  document.getElementById("aqi").value = aqi;
+}
+
+function calculateAQIPM25(pm25) {
+  // Calculate AQI for PM2.5
+  var breakpoints = [0, 12.1, 35.5, 55.5, 150.5, 250.5, 350.5, 500.5];
+  var concentrations = [0, 12, 35.4, 55.4, 150.4, 250.4, 350.4, 500.4];
+  var i = 0;
+  while (pm25 > breakpoints[i + 1]) {
+    i++;
+  }
+  var aqi = ((concentrations[i + 1] - concentrations[i]) / (breakpoints[i + 1] - breakpoints[i])) * (pm25 - breakpoints[i]) + concentrations[i];
+  return Math.round(aqi);
+}
+
+function calculateAQIPM10(pm10) {
+  // Calculate AQI for PM10
+  var breakpoints = [0, 55, 155, 255, 355,425, 505, 604];
+var concentrations = [0, 50, 150, 250, 350, 420, 500, 604];
+var i = 0;
+while (pm10 > breakpoints[i + 1]) {
+i++;
+}
+var aqi = ((concentrations[i + 1] - concentrations[i]) / (breakpoints[i + 1] - breakpoints[i])) * (pm10 - breakpoints[i]) + concentrations[i];
+return Math.round(aqi);
+}
+
+  </script>
+</head>
+<body>
+  <h1>AQI Calculator</h1>
+  
+  <form>
+    <label for="pm25">PM2.5:</label>
+    <input type="number" id="pm25" name="pm25" placeholder="Enter PM2.5 value" min="0" max="999">
+    
+    <br><br>
+    
+    <label for="pm10">PM10:</label>
+    <input type="number" id="pm10" name="pm10" placeholder="Enter PM10 value" min="0" max="999">
+    
+    <br><br>
+    
+    <button type="button" onclick="calculateAQI()">Calculate AQI</button>
+    
+    <br><br>
+    
+    <label for="aqi">AQI:</label>
+    <input type="text" id="aqi" name="aqi" readonly>
+  </form>
+  
+  <script src="script.js"></script>
+</body>
+</html>
+
+</body>
+</html>

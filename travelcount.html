@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Traveling Calculator</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		form {
+			margin: 20px;
+			padding: 20px;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			background-color: #f9f9f9;
+			box-shadow: 0 0 10px rgba(0,0,0,0.2);
+		}
+
+		input[type=text] {
+			padding: 10px;
+			border-radius: 5px;
+			border: none;
+			box-shadow: 0 0 5px rgba(0,0,0,0.1);
+			margin-right: 10px;
+			font-size: 16px;
+		}
+
+		input[type=submit] {
+			padding: 10px;
+			background-color: #4CAF50;
+			color: white;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+			font-size: 16px;
+		}
+
+		h2 {
+			margin-top: 0;
+			font-size: 24px;
+		}
+
+		p {
+			font-size: 18px;
+		}
+
+		@media screen and (max-width: 600px) {
+			form {
+				margin: 10px;
+				padding: 10px;
+			}
+
+			input[type=text] {
+				padding: 5px;
+				margin-right: 5px;
+				font-size: 14px;
+			}
+
+			input[type=submit] {
+				padding: 5px;
+				font-size: 14px;
+			}
+
+			h2 {
+				font-size: 20px;
+			}
+
+			p {
+				font-size: 16px;
+			}
+		}
+	</style>
+</head>
+<body>
+	<form onsubmit="calculateDistance(); return false;">
+		<h2>Traveling Calculator</h2>
+		<p>
+			<label for="start">Starting Point:</label>
+			<input type="text" id="start" name="start" placeholder="Enter starting point" required>
+		</p>
+		<p>
+			<label for="destination">Destination:</label>
+			<input type="text" id="destination" name="destination" placeholder="Enter destination" required>
+		</p>
+		<p>
+			<input type="submit" value="Calculate Distance">
+		</p>
+	</form>
+	<div id="map"></div>
+	<script src="AIzaSyCTNoxKFbh9OSK7PcgCMffWgen-TLc2TUY"
+	async defer></script>
+	<script>
+		var map;
+
+		function initMap() {
+			map = new google.maps.Map(document.getElementById('map'), {
+				center: {lat: -34.397, lng: 150.644},
+				zoom: 8
+			});
+		}
+
+		function calculateDistance() {
+			var start = document.getElementById('start').value;
+			var destination = document.getElementById('destination').value;
+
+			var service = new google.maps.DistanceMatrixService();
+			service.getDistanceMatrix({
+				origins: [start],
+				destinations: [destination],
+				travelMode: 'DRIVING',
+				unitSystem: google.maps.UnitSystem.METRIC,
+				avoidHighways: false,
+				
+}, callback);
+}
+function callback(response, status) {
+		if (status == 'OK') {
+			var origins = response.originAddresses;
+			var destinations = response.destinationAddresses;
+
+			for (var i = 0; i < origins.length; i++) {
+				var results = response.rows[i].elements;
+				for (var j = 0; j < results.length; j++) {
+					var element = results[j];
+					var distance = element.distance.text;
+					var duration = element.duration.text;
+
+					alert("Distance: " + distance + "\nDuration: " + duration);
+				}
+			}
+		} else {
+			alert("Error: " + status);
+		}
+	}
+</script>
+</body>
+</html>
